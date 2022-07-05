@@ -1,7 +1,9 @@
 from enum import Enum
-from wsgiref.simple_server import WSGIRequestHandler 
+
+
 BOARD_WIDTH = 8
 BOARD_HEIGHT = 8
+
 class Pieces(Enum):
     KING = 0
     QUEEN = 1
