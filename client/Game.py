@@ -17,7 +17,8 @@ class Game:
                 # cli input - receive text input in formal chess notation (tokenizer and parser needed for this notation)
                 # mouse input - to be done once gui is established 
             # update snapshot with move applied and save to memory as "Board.current_board: list[BoardPoint]"
-            # compare before and after state of board and reject and roll back "after" state if difference/move is illegal (not sure if this is the correct way forward here)
+            # compare before and after state of board and reject and roll back "after" state if 
+            # difference/move is illegal (not sure if this is the correct way forward here)
 
             pass
             # game loop goes here
