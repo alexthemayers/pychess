@@ -1,25 +1,23 @@
-from Piece import *
-from Constants import *
+from Player import *
 
-class Piece(): # superclass for all pieces instantiated later in this file
-    def __init__(self, type: Pieces, player: Player):
-        self.name = name
-    
-    def isPiece(self):
-        return f"i am a {self.name} \n"
+
+class Piece():  # superclass for all pieces instantiated later in this file
+    def __init__(self, piece_type: str, player: Player):
+        self.type = piece_type
+        self.player = player
+
+    def __repr__(self) -> str:
+        return f"{str(self.type)} \n"
+
 
 class Rook(Piece):
-    
-    def __init__(self): 
-        self.type = ROOK
-    
-    def isPiece(self):
-        return "I am a rook"
-    
-r = Piece("rook")
 
-print(r.isPiece())
+    def __init__(self, player):
+        super().__init__("ROOK", player)
+        super("ROOK", player)
 
+    def __repr__(self) -> str:
+        return super.__repr__(self)
 
 
 if __name__ == "__main__":
