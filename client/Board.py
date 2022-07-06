@@ -50,16 +50,18 @@ class BoardHelper:
             return ret
 
     def printable_board(self, out_type: str):
-        if out_type == "text":
+        if out_type.lower() == "text":
             return self.board
-        elif out_type == "gui":
+        elif out_type.lower() == "gui":
+            pass
+        elif out_type.lower() == "tui":
             pass
         else:
             print('invalid out_type\ncould not print\ncheck your code, yo')
 
 
 if __name__ == "__main__":
-    # print("run main.py")
-    # exit(1)
-    b = BoardHelper()
-    print(b.printable_board("text"))
+    print("run main.py")
+    exit(1)
+    # b = BoardHelper()
+    # print(b.printable_board("text"))

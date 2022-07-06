@@ -1,7 +1,7 @@
 from Player import *
 
 
-class Piece():  # superclass for all pieces instantiated later in this file
+class Piece:  # superclass for all pieces instantiated later in this file
     def __init__(self, piece_type: str, player: Player):
         self.type = piece_type
         self.player = player
