@@ -7,7 +7,6 @@ p: dict = {'p1': {'name': "firstname lastname", 'side': "white"},
 
 
 def create_players_check_repr() -> bool:
-    p: dict = {'p1': {'name': "firstname lastname", 'side': "white"}}
     p1 = Player(p['p1']['name'], p['p1']['side'])
     if str(p1) == f"{p['p1']['name']}\t=>\t{p['p1']['side']}":
         return True
@@ -16,7 +15,7 @@ def create_players_check_repr() -> bool:
 
 
 def printable_text_board() -> bool:
-    board_str: str = str(BoardHelper().printable_board("text"))
+    board_str: str = str(BoardHelper().printable_board("text", Player(p['p1']['name'], p['p1']['side'])))
     test_str: str = """a8(1,8)	b8(2,8)	c8(3,8)	d8(4,8)	e8(5,8)	f8(6,8)	g8(7,8)	h8(8,8)
 
 a7(1,7)	b7(2,7)	c7(3,7)	d7(4,7)	e7(5,7)	f7(6,7)	g7(7,7)	h7(8,7)

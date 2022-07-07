@@ -1,4 +1,4 @@
-class Outcome():
+class Outcome:
     def __init__(self) -> None:
         pass
 

@@ -1,26 +1,37 @@
 from Player import *
+from Board import *
+
 
 class Game:
-    @staticmethod
-    def won(self) -> bool:
-        return False
+    started: bool = False
+    won: bool = False
 
-    @staticmethod
-    def start(self, players: list[Player]):
-        while not Game.won(): # check if game over
-            # rotate active player 
-            # print board 
-                # print board with rotation for proper player viewing perspective
+
+    @classmethod
+    def start(cls):
+        PlayerHelper.init('text')
+        while not Game.won:  # check if game over
+            # rotate active player
+            if Game.started:  # skips rotation on first turn
+                PlayerHelper.rotate_players()
+            if not Game.started:
+                Game.started = True
+
+            # print board
                 # possibility of TUI interface for printing and text input (ncurses)
+            print(BoardHelper.printable_board("text", PlayerHelper.current_player))
+
             # save snapshot of current board to file for recallable reference
-            # wait for input 
-                # cli input - receive text input in formal chess notation (tokenizer and parser needed for this notation)
-                # mouse input - to be done once gui is established 
+            BoardHelper.last_board = BoardHelper.cache_board()  # TODO write a test for this
+
+            # wait for input
+            # cli input - receive text input in formal chess notation (tokenizer and parser needed for this notation)
+            # mouse input - to be done once gui is established
             # update snapshot with move applied and save to memory as "Board.current_board: list[BoardPoint]"
             # compare before and after state of board and reject and roll back "after" state if 
             # difference/move is illegal (not sure if this is the correct way forward here)
 
-            pass
+            print("Game.start() has not been implemented yet!")
             # game loop goes here
 
 

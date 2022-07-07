@@ -1,8 +1,8 @@
 import json
 import os
-from typing import List, Dict
+from typing import Dict, Optional
 from Player import *
-from json import *
+from json import dumps, loads
 from Constants import *
 
 blockNames: List[str] = ["a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
@@ -53,7 +53,8 @@ class Board:
 
 class BoardHelper:
     board = Board()
-    cache_list: Dict[int: str] = {}
+    last_board: str = None
+    cache_list: Optional[Dict[int, str]] = None
 
     @classmethod
     def printable_board(cls, out_type: str, player: Player) -> None:
@@ -77,24 +78,30 @@ class BoardHelper:
         exit(1)
 
     @classmethod
-    def cache_board(cls) -> None:
+    def cache_board(cls) -> str:
         if cls.cache_list is None:
             cls.write_cache(BOARD_CACHE)
+            return BOARD_CACHE
         else:
             filename = str(len(cls.cache_list)).join(BOARD_CACHE.split("0000"))
             cls.write_cache(filename)
-
+            return filename
     @classmethod
     def clean_cache(cls, path: str) -> bool:
+        cache_limit = None
         del_me: List[str] = []
         if path in cls.cache_list.values():
-            cache_limit: int = {k for k, v in cls.cache_list.items() if v is path}[0]
-            # TODO 'cache_limit' could match multiple values and only return the first
+            for k, v in cls.cache_list.items():
+                while v != path:
+                    continue
+                cache_limit = k
+                break
+
+            assert (issubclass(cache_limit, int)), f"clean cache function failure. cache_limit should contain an integer, not {type(cache_limit)}"
             cls.cache_list = {key: value if key <= cache_limit else del_me.append(value) for key, value in cls.cache_list.items()}
             # should recreate cache_list retaining only values that were generated up to the most recent cache point
             for file in del_me:
                 os.unlink(file)
-
             return True
         else:
             print("could not find filename in cache list")
@@ -104,7 +111,7 @@ class BoardHelper:
     @classmethod
     def write_cache(cls, path: str) -> None:
         with open(path, "a") as f:
-            if f.write(json.dumps(cls.board)) > 0:
+            if f.write(dumps(cls.board)) > 0:
                 cls.cache_list[len(cls.cache_list)] = str(BOARD_CACHE)
                 f.close()
             else:
@@ -116,7 +123,7 @@ class BoardHelper:
     def read_cache(cls, path: str) -> Board:
         with open(path, "r") as f:
             if f is not None:
-                b: Board = json.loads(f.read())
+                b: Board = loads(f.read())
                 f.close()
                 cls.clean_cache(path)
                 return b
