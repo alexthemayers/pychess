@@ -1,9 +1,7 @@
-import json
 import os
 from typing import Dict, Optional
-from Player import *
 from json import dumps, loads
-from Constants import *
+from Piece import *
 
 blockNames: List[str] = ["a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
                          "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",
@@ -23,13 +21,32 @@ class Board:
             self.x = x
             self.y = y
             self.name = name
+            self._piece: Optional[Piece] = None  # underscore denotes protected instance variable
 
         def __repr__(self) -> str:
             return self.name
 
+        def set_piece(self, piece: Piece, player: Player) -> bool:
+            self._piece = piece
+            if isinstance(self._piece, Piece):
+                return True
+            else:
+                return False
+
+        def get_piece(self):
+            p = self._piece
+            self._piece = None
+            return p
+
+        def show_piece(self) -> str:
+            if self._piece is None:
+                return "_"
+            return self._piece.type
+
     def __init__(self) -> None:
         # self.points = [self.BoardPoint(x, y, name) for (x, name) in zip(range(1, BOARD_WIDTH + 1), blockNames) for y in range(1, BOARD_HEIGHT + 1)]
         self.points: List[Board.BoardPoint] = []
+        self.piece_pool: Dict[Team, Piece] = {}
         while len(blockNames) > 0:
             for y in reversed(range(1, BOARD_HEIGHT + 1)):
                 for x in range(1, BOARD_WIDTH + 1):
@@ -86,9 +103,10 @@ class BoardHelper:
             filename = str(len(cls.cache_list)).join(BOARD_CACHE.split("0000"))
             cls.write_cache(filename)
             return filename
+
     @classmethod
     def clean_cache(cls, path: str) -> bool:
-        cache_limit = None
+        cache_limit: Optional[int] = None
         del_me: List[str] = []
         if path in cls.cache_list.values():
             for k, v in cls.cache_list.items():
@@ -97,8 +115,9 @@ class BoardHelper:
                 cache_limit = k
                 break
 
-            assert (issubclass(cache_limit, int)), f"clean cache function failure. cache_limit should contain an integer, not {type(cache_limit)}"
-            cls.cache_list = {key: value if key <= cache_limit else del_me.append(value) for key, value in cls.cache_list.items()}
+            assert (type(cache_limit) is int), f"clean cache function failure. cache_limit should contain an integer, not {type(cache_limit)}"
+            cls.cache_list = {key: value if key <= cache_limit else del_me.append(value) for key, value in
+                              cls.cache_list.items()}
             # should recreate cache_list retaining only values that were generated up to the most recent cache point
             for file in del_me:
                 os.unlink(file)
@@ -106,7 +125,6 @@ class BoardHelper:
         else:
             print("could not find filename in cache list")
             return False
-
 
     @classmethod
     def write_cache(cls, path: str) -> None:

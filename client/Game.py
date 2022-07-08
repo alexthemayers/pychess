@@ -1,11 +1,9 @@
-from Player import *
 from Board import *
 
 
 class Game:
     started: bool = False
     won: bool = False
-
 
     @classmethod
     def start(cls):
@@ -18,7 +16,7 @@ class Game:
                 Game.started = True
 
             # print board
-                # possibility of TUI interface for printing and text input (ncurses)
+            # possibility of TUI interface for printing and text input (ncurses)
             print(BoardHelper.printable_board("text", PlayerHelper.current_player))
 
             # save snapshot of current board to file for recallable reference
