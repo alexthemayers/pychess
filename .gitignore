@@ -130,3 +130,6 @@ dmypy.json
 
 #Intellij config 
 .idea
+
+# OSX specific
+.DS_Store
