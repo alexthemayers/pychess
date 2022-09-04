@@ -128,8 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#Intellij config 
+# IDEs
 .idea
+.vscode
 
 # OSX specific
 .DS_Store
