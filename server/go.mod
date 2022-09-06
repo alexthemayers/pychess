@@ -1,4 +1,4 @@
-module github.com/alexthemayers/pychess/tree/main/server
+module pychess
 
 go 1.19
 
