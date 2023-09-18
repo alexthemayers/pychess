@@ -1,38 +1,33 @@
-from Board import *
+from board import Board
+from player import Player
 
 
 class Game:
-    started: bool = False
-    won: bool = False
+    """
+        This is a singleton class to house basic game logic.
+        Don't get too excited. We don't want this to replace the main.
+        Be very intentional about what lives in here and what lives in main.py
+    """
+    _instance = None
+    second_player_turn: bool = False
 
-    @classmethod
-    def start(cls):
-        PlayerHelper.init('text')
-        while not Game.won:  # check if game over
-            # rotate active player
-            if Game.started:  # skips rotation on first turn
-                PlayerHelper.rotate_players()
-            if not Game.started:
-                Game.started = True
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(Game, cls).__new__(cls)
+        return cls._instance
 
-            # print board
-            # possibility of TUI interface for printing and text input (ncurses)
-            print(BoardHelper.printable_board("text", PlayerHelper.current_player))
-
-            # save snapshot of current board to file for recallable reference
-            BoardHelper.last_board = BoardHelper.cache_board()  # TODO write a test for this
-
-            # wait for input
-            # cli input - receive text input in formal chess notation (tokenizer and parser needed for this notation)
-            # mouse input - to be done once gui is established
-            # update snapshot with move applied and save to memory as "Board.current_board: list[BoardPoint]"
-            # compare before and after state of board and reject and roll back "after" state if 
-            # difference/move is illegal (not sure if this is the correct way forward here)
-
-            print("Game.start() has not been implemented yet!")
-            # game loop goes here
+    def _play(self, player: Player, board: Board):
+        """
+        Turn for turn logic lives in this inner method.
+        Handle the interactions the player has with the board in this method.
+        :param player:
+        :return:
+        """
+        pass
 
 
-if __name__ == "__main__":
-    print("run main.py")
-    exit(1)
+def rotate_players(game: Game):
+    if game.second_player_turn:
+        game.second_player_turn = False
+    else:
+        game.second_player_turn = True
