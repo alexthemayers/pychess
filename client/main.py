@@ -15,7 +15,7 @@ def main():
     p1 = get_new_player()
     print("Next player:")
     p2 = get_new_player()
-    game = Game()
+    # game = Game()
     board = populate_board(Board(), [p1, p2])
     current_player: Optional[Player] = None
 
@@ -56,26 +56,26 @@ def main():
 def populate_board(board: Board, players: List[Player]) -> Board:
     players: Dict[str, Player] = {p.team: p for p in players}
 
-    def __place_pawn_piece(block: _Block, team: str) -> None:
-        assert str(block.position).endswith("7") or str(block.position).endswith(
+    def __place_pawn_piece(b: _Block, team: str) -> None:
+        assert str(b.position).endswith("7") or str(b.position).endswith(
             "2"), "Pawn pieces should not be placed on rows other than 7 or 2"
-        block.set_piece(Rook(players[team]))
+        b.set_piece(Rook(players[team]))
 
-    def __place_non_pawn_piece(block: _Block, team: str) -> None:
-        assert block.position.endswith("8") or block.position.endswith(
+    def __place_non_pawn_piece(b: _Block, team: str) -> None:
+        assert b.position.endswith("8") or b.position.endswith(
             "1"), "Non-pawn pieces should not be placed on rows other than 8 or 1"
-        if block.position.startswith(("a", "h")):  # R
-            block.set_piece(Rook(players[team]))
-        elif block.position.startswith(("b", "g")):  # N
-            block.set_piece(Knight(players[team]))
-        elif block.position.startswith(("c", "f")):  # B
-            block.set_piece(Bishop(players[team]))
-        elif block.position.startswith("d"):  # Q
-            block.set_piece(Queen(players[team]))
-        elif block.position.startswith("e"):  # K
-            block.set_piece(King(players[team]))
+        if b.position.startswith(("a", "h")):  # R
+            b.set_piece(Rook(players[team]))
+        elif b.position.startswith(("b", "g")):  # N
+            b.set_piece(Knight(players[team]))
+        elif b.position.startswith(("c", "f")):  # B
+            b.set_piece(Bishop(players[team]))
+        elif b.position.startswith("d"):  # Q
+            b.set_piece(Queen(players[team]))
+        elif b.position.startswith("e"):  # K
+            b.set_piece(King(players[team]))
         else:
-            print(f"point {block.position} should not be present on board")
+            print(f"point {b.position} should not be present on board")
 
     for block in board.get_board():
         if block.position.endswith("8"):
