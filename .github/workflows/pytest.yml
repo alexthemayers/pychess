@@ -21,4 +21,4 @@ jobs:
         run: pip install -r client/requirements.txt
 
       - name: Run pytest
-        run: cd client && pytest
+        run: cd client && python -m pytest
