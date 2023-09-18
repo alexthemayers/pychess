@@ -1,122 +1,115 @@
-from Player import *
-from Constants import *
-from typing import Dict, Tuple
-from Board import *
+from enum import Enum
+from typing import Tuple
+
+from player import Player
 
 
-class Piece():  # base class for all pieces
-
-    def __init__(self, piece_type: str, player: Player):
-        self.type = piece_type.lower()
-        self.player = player
-        self.team = self.player.team
+class PieceType(Enum):
+    KING = 1
+    QUEEN = 2
+    BISHOP = 3
+    KNIGHT = 4
+    ROOK = 5
+    PAWN = 6
 
     def __repr__(self) -> str:
-        return f"{str(self.type)}"
+        return self.name.title()
 
 
-class PieceHelper:
-    board_generated: bool = False
+class PieceColour(Enum):
+    BLACK = 1
+    WHITE = 2
 
-    @classmethod
-    def generate_pieces(cls, board: Board) -> Optional[Board]:
-        if not cls.board_generated:  # check to see if previously run and short circuit if true
-            assert len(PlayerHelper.players) == 2, "two players must have been created for a board to be generated"
+    def __repr__(self) -> str:
+        return self.name.title()
 
-        def __place_pawn_piece(p: Board.BoardPoint, team: Team) -> None:
-            players: Dict[Team, Player] = {p.team: p for p in PlayerHelper.players}
-            assert str(p).endswith("7") or str(p).endswith(
-                "2"), "Pawn pieces should not be placed on rows other than 7 or 2"
-            p.set_piece(Rook(players[team]))
 
-        def __place_non_pawn_piece(p: Board.BoardPoint, team: Team) -> None:
-            players: Dict[Team, Player] = {p.team: p for p in PlayerHelper.players}
-            assert str(p).endswith("8") or str(p).endswith(
-                "1"), "Non-pawn pieces should not be placed on rows other than 8 or 1"
-            if str(p).startswith(("a", "h")):  # R
-                p.set_piece(Rook(players[team]))
-            elif str(p).startswith(("b", "g")):  # N
-                p.set_piece(Knight(players[team]))
-            elif str(p).startswith(("c", "f")):  # B
-                p.set_piece(Bishop(players[team]))
-            elif str(p).startswith("d"):  # Q
-                p.set_piece(Queen(players[team]))
-            elif str(p).startswith("e"):  # K
-                p.set_piece(King(players[team]))
-            else:
-                print(f"point {str(p)} should not be present on board")
+class Piece:  # base class for all pieces
+    type: PieceType
+    colour: PieceColour
+    player: Player
 
-        for point in board.points:
-            if str(point).endswith("8"):  # black pieces
-                __place_non_pawn_piece(point, Team.TEAM_BLACK)
-            elif str(point).endswith("7"):  # black pawns
-                __place_pawn_piece(point, Team.TEAM_BLACK)
-            elif str(point).endswith("2"):  # white pawns
-                __place_pawn_piece(point, Team.TEAM_WHITE)
-            elif str(point).endswith("1"):  # white pieces
-                __place_non_pawn_piece(point, Team.TEAM_WHITE)
-            else:
-                print(f"invalid point {point.name} present in board")
-                exit(1)
-            return board
-        else:
-            pass
+    def __init__(self, player: Player):
+        self.player = player
+
+    def __repr__(self):
+        return f"{self.type}"
+
+    def has_moved(self) -> bool:
+        pass
+
+    def get_team(self) -> str:
+        return self.player.team.lower()
+
+    def can_move(self, move: Tuple[str, str]) -> bool:
+        pass
 
 
 class Rook(Piece):
+    castled: bool = False
 
     def __init__(self, player):
-        super().__init__(self.__name__, player)
+        super().__init__(player)
+        self.type = PieceType.ROOK
 
     def __repr__(self) -> str:
-        return super.__repr__(self)
+        return str(self.type)
 
 
 class Bishop(Piece):
-
+    # TODO handle blocking pieces on board
     def __init__(self, player):
-        super().__init__(self.__name__, player)
+        super().__init__(player)
+        self.type = PieceType.BISHOP
 
     def __repr__(self) -> str:
-        return super.__repr__(self)
+        return str(self.type)
 
 
 class Knight(Piece):
 
     def __init__(self, player):
-        super().__init__(self.__name__, player)
+        super().__init__(player)
+        self.type = PieceType.KNIGHT
 
     def __repr__(self) -> str:
-        return super.__repr__(self)
+        return str(self.type)
 
 
 class King(Piece):
+    castled: bool = False
 
     def __init__(self, player):
-        super().__init__(self.__name__, player)
+        super().__init__(player)
+        self.type = PieceType.KING
 
     def __repr__(self) -> str:
-        return super.__repr__(self)
+        return str(self.type)
 
 
 class Queen(Piece):
-
     def __init__(self, player):
-        super().__init__(self.__name__, player)
+        super().__init__(player)
+        self.type = PieceType.QUEEN
 
     def __repr__(self) -> str:
-        return super.__repr__(self)
+        return str(self.type)
 
 
 class Pawn(Piece):
+    _has_moved: bool = False
+
+    def has_moved(self) -> bool:
+        return self._has_moved
+
+    def set_has_moved(self) -> None:
+        if self._has_moved is not False:
+            raise RuntimeError()
+        self._has_moved = True
 
     def __init__(self, player):
-        super().__init__(self.__name__, player)
+        super().__init__(player)
+        self.type = PieceType.PAWN
 
     def __repr__(self) -> str:
-        return super.__repr__(self)
-
-
-if __name__ == "__main__":
-    print("run main.py")
-    exit(1)
+        return str(self.type)
