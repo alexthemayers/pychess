@@ -1,13 +1,9 @@
 package main
 
 import (
-	"flag"
+	flag "github.com/spf13/pflag"
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
-
-var sAddress string
 
 func init() {
 	flag.StringVar(&sAddress, "sAddress", "localhost", "URL to listen on")
