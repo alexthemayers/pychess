@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 
-from typing import Optional, Dict, List, Tuple
+from typing import Optional, Tuple
 
-from block import _Block
-from board import Board, move_is_possible
-from game import Game
+from board import Board, move_is_possible, populate_board
 from input import get_move, is_move_primitive
-from piece import Rook, Knight, Bishop, Queen, King
 from player import Player, get_new_player, get_current_turn
 
 
@@ -50,48 +47,6 @@ def main():
     """
     has the game been won?
     """
-
-
-# TODO check out how this compromises the dependency heirarchy and find new home if necessary
-def populate_board(board: Board, players: List[Player]) -> Board:
-    players: Dict[str, Player] = {p.team: p for p in players}
-
-    def __place_pawn_piece(b: _Block, team: str) -> None:
-        assert str(b.position).endswith("7") or str(b.position).endswith(
-            "2"), "Pawn pieces should not be placed on rows other than 7 or 2"
-        b.set_piece(Rook(players[team]))
-
-    def __place_non_pawn_piece(b: _Block, team: str) -> None:
-        assert b.position.endswith("8") or b.position.endswith(
-            "1"), "Non-pawn pieces should not be placed on rows other than 8 or 1"
-        if b.position.startswith(("a", "h")):  # R
-            b.set_piece(Rook(players[team]))
-        elif b.position.startswith(("b", "g")):  # N
-            b.set_piece(Knight(players[team]))
-        elif b.position.startswith(("c", "f")):  # B
-            b.set_piece(Bishop(players[team]))
-        elif b.position.startswith("d"):  # Q
-            b.set_piece(Queen(players[team]))
-        elif b.position.startswith("e"):  # K
-            b.set_piece(King(players[team]))
-        else:
-            print(f"point {b.position} should not be present on board")
-
-    for block in board.get_board():
-        if block.position.endswith("8"):
-            __place_non_pawn_piece(block, "black")
-        elif block.position.endswith("7"):
-            __place_pawn_piece(block, "black")
-        elif block.position.endswith("2"):
-            __place_pawn_piece(block, "white")
-        elif block.position.endswith("1"):
-            __place_non_pawn_piece(block, "white")
-        else:
-            print(f"invalid point {block.position} present in board")
-            exit(1)
-        return board
-    else:
-        pass
 
 
 def player_owns_piece(board: Board, owner_team: str, move: Tuple[str, str]) -> bool:

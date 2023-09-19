@@ -8,9 +8,7 @@ from input import (
     is_move_primitive
 )
 from mapping import (
-    calculate_vertical_difference,
     calculate_diagonal_difference,
-    calculate_horizontal_difference,
     calculate_xy_difference
 )
 
@@ -79,18 +77,38 @@ def pawn_can_make(move: Tuple[str, str], has_moved: bool, team: str) -> bool:
         return False
     if move[0] == move[1]:
         return False
-    before = move[0]
-    after = move[1]
-    horizontal_difference = calculate_horizontal_difference(before, after)
-    vertical_difference = calculate_vertical_difference(before, after)
+    horizontal_difference, vertical_difference = calculate_xy_difference(move)
+    going_straight = horizontal_difference == 0
+    going_diagonal = horizontal_difference == -1 or horizontal_difference == 1
+    if has_moved:
+        # first move, two paces
+        if going_straight or going_diagonal:
+            if team == "white":
+                if vertical_difference == 1:
+                    return True
+            if team == "black":
+                if vertical_difference == -1:
+                    return True
+        return False
+
     if not has_moved:
         # first move, two paces
-        if team == "white":
-            if horizontal_difference == 0 and 1 <= vertical_difference <= 2:
-                return True
-        if team == "black":
-            if horizontal_difference == 0 and -2 <= vertical_difference <= -1:
-                return True
+        if going_straight:
+            if team == "white":
+                if 1 <= vertical_difference <= 2:
+                    return True
+            if team == "black":
+                if -2 <= vertical_difference <= -1:
+                    return True
+        if going_diagonal:
+            if team == "white":
+                if vertical_difference == 1:
+                    return True
+            if team == "black":
+                if vertical_difference == -1:
+                    return True
+            return False
+    return False
 
 
 def close_enough_for_king(move: Tuple[str, str]) -> bool:

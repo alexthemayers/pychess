@@ -1,17 +1,17 @@
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict
 
 from block import _Block
-from input import is_possible_vertical_move
 from mapping import (
     calculate_horizontal_difference,
-    calculate_vertical_difference, calculate_xy_difference
+    calculate_vertical_difference
 )
 from movement import (
     king_can_make,
     rook_can_make,
     queen_can_make,
     bishop_can_make,
-    knight_can_make
+    knight_can_make,
+    pawn_can_make
 )
 from piece import (
     Piece,
@@ -22,6 +22,7 @@ from piece import (
     Bishop,
     Knight
 )
+from player import Player
 
 _BLOCK_NAMES: List[str] = ["a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
                            "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",
@@ -43,15 +44,19 @@ class Board:
         self._board = [_Block(block) for block in _BLOCK_NAMES]
 
     def __repr__(self) -> str:
-        ret: str = ""
-        idx = 1
+        ret: str = ' \tA\tB\tC\tD\tE\tF\tG\tH\n'
+        idx = 9
+        rows_left_to_print = 8
         # for name, block in self._board:
         for block in self._board:
+            if idx % 8 == 1:
+                ret += str(rows_left_to_print) + "\t"
+                rows_left_to_print -= 1
             if block.get_piece() is None:
-                ret += block.position
+                ret += "__"
             else:
-                ret += str(block.get_piece())[0] + " "
-            if idx % 8 == 0:
+                ret += str(block.get_piece())[0:2].upper()
+            if idx % 8 == 0 and idx > 15:
                 ret += "\n"
             else:
                 ret += "\t"
@@ -218,53 +223,71 @@ class Board:
         pass
 
     def is_blocked_diagonal(self, move: Tuple[str, str]):
-        current = move[0]
-        end = move[1]
+        current_loc = move[0]
+        next_loc: Optional[str] = None
+        last_loc = move[1]
         is_blocked: bool = False
-        vertical_difference = calculate_vertical_difference(current, end)
-        horizontal_difference = calculate_horizontal_difference(current, end)
+        vertical_difference = calculate_vertical_difference(current_loc, last_loc)
+        horizontal_difference = calculate_horizontal_difference(current_loc, last_loc)
         # we should not consider a piece at the end position to cause blocking, we take the piece in this case
-        while current != end or not is_blocked:
+        while True:
             if vertical_difference > 0 and horizontal_difference > 0:
-                current = self.north_east(current, 1)
+                next_loc = self.north_east(current_loc, 1)
             if vertical_difference < 0 < horizontal_difference:
-                current = self.south_east(current, 1)
+                next_loc = self.south_east(current_loc, 1)
             if vertical_difference > 0 > horizontal_difference:
-                current = self.north_west(current, 1)
+                next_loc = self.north_west(current_loc, 1)
             if vertical_difference < 0 and horizontal_difference < 0:
-                current = self.south_west(current, 1)
-            if self.get_piece(current) is not None:
-                is_blocked = True
+                next_loc = self.south_west(current_loc, 1)
+            # we don't check the last location as we may be taking a piece that resides there
+            if next_loc != last_loc:
+                if self.get_piece(next_loc) is not None:
+                    is_blocked = True
+            current_loc = next_loc
+            if current_loc == last_loc or is_blocked:
+                break
         return is_blocked
 
     def is_blocked_vertical(self, move: Tuple[str, str]):
-        current = move[0]
-        end = move[1]
+        current_loc = move[0]
+        last_loc = move[1]
+        next_loc: Optional[str] = None
         is_blocked: bool = False
-        vertical_difference = calculate_vertical_difference(current, end)
+        vertical_difference = calculate_vertical_difference(current_loc, last_loc)
         # we should not consider a piece at the end position to cause blocking, we take the piece in this case
-        while current != end or not is_blocked:
+        while True:
             if vertical_difference > 0:
-                current = self.north(current, 1)
+                next_loc = self.north(current_loc, 1)
             if vertical_difference < 0:
-                current = self.south(current, 1)
-            if self.get_piece(current) is not None:
-                is_blocked = True
+                next_loc = self.south(current_loc, 1)
+            # we don't check the last location as we may be taking a piece that resides there
+            if next_loc != last_loc:
+                if self.get_piece(next_loc) is not None:
+                    is_blocked = True
+            current_loc = next_loc
+            if current_loc == last_loc or is_blocked:
+                break
         return is_blocked
 
     def is_blocked_horizontal(self, move: Tuple[str, str]):
-        current = move[0]
-        end = move[1]
+        current_loc = move[0]
+        last_loc = move[1]
+        next_loc: Optional[str] = None
         is_blocked: bool = False
-        horizontal_difference = calculate_horizontal_difference(current, end)
+        horizontal_difference = calculate_horizontal_difference(current_loc, last_loc)
         # we should not consider a piece at the end position to cause blocking, we take the piece in this case
-        while current != end or not is_blocked:
+        while True:
             if horizontal_difference > 0:
-                current = self.east(current, 1)
+                next_loc = self.east(current_loc, 1)
             if horizontal_difference < 0:
-                current = self.west(current, 1)
-            if self.get_piece(current) is not None:
-                is_blocked = True
+                next_loc = self.west(current_loc, 1)
+            # we don't check the last location as we may be taking a piece that resides there
+            if next_loc != last_loc:
+                if self.get_piece(next_loc) is not None:
+                    is_blocked = True
+            current_loc = next_loc
+            if current_loc == last_loc or is_blocked:
+                break
         return is_blocked
 
     def clear_piece(self, position: str):
@@ -276,7 +299,7 @@ class Board:
 def move_is_possible(piece: Piece, board: Board, move: Tuple[str, str]) -> bool:
     match piece:
         case Pawn() as pawn:
-            return (pawn_can_move(board, pawn, move)
+            return (pawn_can_make(move, pawn.has_moved(), pawn.get_team())
                     and not board.is_blocked_vertical(move)
                     and not board.is_blocked_horizontal(move)
                     and not board.is_blocked_diagonal(move))
@@ -302,55 +325,31 @@ def move_is_possible(piece: Piece, board: Board, move: Tuple[str, str]) -> bool:
             return knight_can_make(move)
 
 
-def pawn_can_move(board: Board, piece: Pawn, move: Tuple[str, str]) -> bool:
-    # TODO TODO TODO  fix this shit, oh my god please
-    before = move[0]
-    after = move[1]
-    # First move, forward 1 or 2 spaces
-    horizontal_difference, vertical_difference = calculate_xy_difference(move)
-    if not piece.has_moved():
-        # moving on the same column
-        if is_possible_vertical_move(move):
-            # different restrictions per team
-            if piece.get_team() == "white":
-                # TODO we're not taking a piece
-                # if board.get_piece(after) is None:
-                # check if we're moving no more than 2 places
-                if 2 >= calculate_vertical_difference(before, after) >= 1:
-                    # TODO MOVE somewhere outside of this function
-                    piece.set_has_moved()  # TODO this should be called outside of this function too
-                    return True
-            if board.get_piece(before).get_team() == "black":
-                # TODO we're not taking a piece
-                # if board.get_piece(after) is None:
-                if -2 <= calculate_vertical_difference(before, after) <= -1:
-                    # TODO MOVE somewhere outside of this function
-                    piece.set_has_moved()  # TODO this should be called outside of this function too
-                    return True
+# TODO check out how this compromises the dependency heirarchy and find new home if necessary
+def populate_board(board: Board, players: List[Player]) -> Board:
+    players: Dict[str, Player] = {p.team: p for p in players}
+
+    def __place_non_pawn_piece(b: _Block, team: str) -> None:
+        if b.position.startswith(("a", "h")):  # R
+            b.set_piece(Rook(players[team]))
+        elif b.position.startswith(("b", "g")):  # N
+            b.set_piece(Knight(players[team]))
+        elif b.position.startswith(("c", "f")):  # B
+            b.set_piece(Bishop(players[team]))
+        elif b.position.startswith("d"):  # Q
+            b.set_piece(Queen(players[team]))
+        elif b.position.startswith("e"):  # K
+            b.set_piece(King(players[team]))
         else:
-            if board.get_piece(before).get_team().lower() == "white":
-                # check vertical bounds, 1 because of white pieces' board orientation
-                # we're moving 2 places
-                if vertical_difference != 1:
-                    return False
-                # check horizontal bounds
-                if horizontal_difference != 1 or horizontal_difference != -1:
-                    if board.get_piece(after) is not None:
-                        # TODO MOVE somewhere outside of this function
-                        piece.set_has_moved()  # TODO this should be called outside of this function too
-                        return True
-            if board.get_piece(before).get_team() == "black":
-                # check vertical bounds, -1 because of black pieces' board orientation
-                if vertical_difference != -1:
-                    return False
-                # check horizontal bounds
-                if horizontal_difference == 1 or horizontal_difference == -1:
-                    if board.get_piece(after) is not None:
-                        # TODO MOVE somewhere outside of this function
-                        piece.set_has_moved()  # TODO this should be called outside of this function too
-                        return True
-                    if board.get_piece(after) is not None:
-                        # TODO MOVE somewhere outside of this function
-                        piece.set_has_moved()  # TODO this should be called outside of this function too
-                        return True
-    return False
+            print(f"point {b.position} should not be present on board")
+
+    for b in board.get_board():
+        if b.position.endswith("8"):
+            __place_non_pawn_piece(b, "black")
+        elif b.position.endswith("7"):
+            b.set_piece(Pawn(players["black"]))
+        elif b.position.endswith("2"):
+            b.set_piece(Pawn(players["white"]))
+        elif b.position.endswith("1"):
+            __place_non_pawn_piece(b, "white")
+    return board
