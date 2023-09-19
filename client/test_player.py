@@ -3,8 +3,6 @@ from unittest.mock import patch
 from player import get_new_player, Player, get_current_turn
 
 
-# Replace 'your_module' with the actual name of the module where your function and Player class are defined
-
 def test_get_new_player_valid_input():
     with patch('builtins.input', side_effect=["Alice", "white"]):
         player = get_new_player()

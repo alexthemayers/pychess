@@ -1,4 +1,6 @@
-from board import Board
+from board import Board, populate_board
+from piece import Piece
+from player import Player
 
 
 # Replace 'your_module' with the actual name of the module where your Board class is defined
@@ -13,15 +15,34 @@ def test_board_repr():
     # Test the __repr__ method to check if it returns a string representation of the board
     board = Board()
     expected_repr = (
-        "a8\tb8\tc8\td8\te8\tf8\tg8\th8\n"
-        "a7\tb7\tc7\td7\te7\tf7\tg7\th7\n"
-        "a6\tb6\tc6\td6\te6\tf6\tg6\th6\n"
-        "a5\tb5\tc5\td5\te5\tf5\tg5\th5\n"
-        "a4\tb4\tc4\td4\te4\tf4\tg4\th4\n"
-        "a3\tb3\tc3\td3\te3\tf3\tg3\th3\n"
-        "a2\tb2\tc2\td2\te2\tf2\tg2\th2\n"
-        "a1\tb1\tc1\td1\te1\tf1\tg1\th1\n"
+        ' \tA\tB\tC\tD\tE\tF\tG\tH\n'
+        '8\t__\t__\t__\t__\t__\t__\t__\t__\n'
+        '7\t__\t__\t__\t__\t__\t__\t__\t__\n'
+        '6\t__\t__\t__\t__\t__\t__\t__\t__\n'
+        '5\t__\t__\t__\t__\t__\t__\t__\t__\n'
+        '4\t__\t__\t__\t__\t__\t__\t__\t__\n'
+        '3\t__\t__\t__\t__\t__\t__\t__\t__\n'
+        '2\t__\t__\t__\t__\t__\t__\t__\t__\n'
+        '1\t__\t__\t__\t__\t__\t__\t__\t__\n'
     )
+    assert repr(board) == expected_repr
+
+
+def test_board_repr_with_pieces():
+    # Test the __repr__ method to check if it returns a string representation of the board
+    player1 = Player("test name", "white")
+    player2 = Player("test name", "black")
+    board = Board()
+    populate_board(board, [player1, player2])
+    expected_repr = (' \tA\tB\tC\tD\tE\tF\tG\tH\n'
+                     '8\tRO\tKN\tBI\tQU\tKI\tBI\tKN\tRO\n'
+                     '7\tPA\tPA\tPA\tPA\tPA\tPA\tPA\tPA\n'
+                     '6\t__\t__\t__\t__\t__\t__\t__\t__\n'
+                     '5\t__\t__\t__\t__\t__\t__\t__\t__\n'
+                     '4\t__\t__\t__\t__\t__\t__\t__\t__\n'
+                     '3\t__\t__\t__\t__\t__\t__\t__\t__\n'
+                     '2\tPA\tPA\tPA\tPA\tPA\tPA\tPA\tPA\n'
+                     '1\tRO\tKN\tBI\tQU\tKI\tBI\tKN\tRO\n')
     assert repr(board) == expected_repr
 
 
@@ -53,10 +74,21 @@ def test_move_methods():
     # Add more test cases for other move methods
 
 
+def test_move():
+    board = Board()
+    player1 = Player("player1", "white")
+    player2 = Player("player2", "black")
+    populate_board(board, [player1, player2])
+    before = "a2"
+    after = "a4"
+    piece = board.get_piece(before)
+    board.move((before, after))
+    assert board.get_piece(after) is piece
+    assert board.get_piece(before) is None
+
+
 def test_set_piece():
     # Test the set_piece method
-    from piece import Piece  # Import the Piece class if not already imported
-    from player import Player
     board = Board()
     player = Player("testname", "white")
     piece = Piece(player)  # Create a test piece
@@ -66,3 +98,45 @@ def test_set_piece():
 
     # Check if the piece is set correctly
     assert board.get_piece("e4") == piece
+
+
+def test_is_blocked_diagonal():
+    board = Board()
+    player = Player("testname", "white")
+    piece1 = Piece(player)  # Create a test piece
+    piece2 = Piece(player)  # Create a test piece
+    board.set_piece(piece1, "a1")
+    board.set_piece(piece2, "c3")
+    assert board.is_blocked_diagonal(("a1", "d4"))  # blocked by c3
+    assert not board.is_blocked_diagonal(("a1", "b2"))  # starting point has piece
+    assert not board.is_blocked_diagonal(("a1", "c3"))  # starting point and endpoint has piece
+    assert not board.is_blocked_diagonal(("e1", "d2"))  # not blocked
+    assert board.is_blocked_diagonal(("e1", "b4"))  # blocked by c3
+
+
+def test_is_blocked_horizontal():
+    board = Board()
+    player = Player("testname", "white")
+    piece1 = Piece(player)  # Create a test piece
+    piece2 = Piece(player)  # Create a test piece
+    board.set_piece(piece1, "a1")
+    board.set_piece(piece2, "f1")
+    assert board.is_blocked_horizontal(("a1", "g1"))  # blocked by f1
+    assert not board.is_blocked_horizontal(("a1", "b1"))  # starting point has piece
+    assert not board.is_blocked_horizontal(("a1", "f1"))  # starting point and endpoint has piece
+    assert not board.is_blocked_horizontal(("b1", "e1"))  # not blocked
+    assert board.is_blocked_horizontal(("d1", "g1"))  # blocked by f1
+
+
+def test_is_blocked_vertical():
+    board = Board()
+    player = Player("testname", "white")
+    piece1 = Piece(player)  # Create a test piece
+    piece2 = Piece(player)  # Create a test piece
+    board.set_piece(piece1, "a1")
+    board.set_piece(piece2, "a7")
+    assert board.is_blocked_vertical(("a1", "a8"))  # blocked by a7
+    assert not board.is_blocked_vertical(("a1", "a2"))  # starting point has piece
+    assert not board.is_blocked_vertical(("a1", "a7"))  # starting point and endpoint has piece
+    assert not board.is_blocked_vertical(("b1", "b7"))  # not blocked
+    assert board.is_blocked_vertical(("a5", "a8"))  # blocked by a7
