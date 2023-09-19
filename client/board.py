@@ -44,7 +44,7 @@ class Board:
         self._board = [_Block(block) for block in _BLOCK_NAMES]
 
     def __repr__(self) -> str:
-        ret: str = ' \tA\tB\tC\tD\tE\tF\tG\tH\n'
+        ret: str = ' \tA\tB\tC\tD\tE\tF\tG\tH\n\n'
         idx = 9
         rows_left_to_print = 8
         # for name, block in self._board:
@@ -57,7 +57,7 @@ class Board:
             else:
                 ret += str(block.get_piece())[0:2].upper()
             if idx % 8 == 0 and idx > 15:
-                ret += "\n"
+                ret += "\n\n"
             else:
                 ret += "\t"
             idx += 1

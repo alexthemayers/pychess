@@ -15,15 +15,15 @@ def test_board_repr():
     # Test the __repr__ method to check if it returns a string representation of the board
     board = Board()
     expected_repr = (
-        ' \tA\tB\tC\tD\tE\tF\tG\tH\n'
-        '8\t__\t__\t__\t__\t__\t__\t__\t__\n'
-        '7\t__\t__\t__\t__\t__\t__\t__\t__\n'
-        '6\t__\t__\t__\t__\t__\t__\t__\t__\n'
-        '5\t__\t__\t__\t__\t__\t__\t__\t__\n'
-        '4\t__\t__\t__\t__\t__\t__\t__\t__\n'
-        '3\t__\t__\t__\t__\t__\t__\t__\t__\n'
-        '2\t__\t__\t__\t__\t__\t__\t__\t__\n'
-        '1\t__\t__\t__\t__\t__\t__\t__\t__\n'
+        ' \tA\tB\tC\tD\tE\tF\tG\tH\n\n'
+        '8\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+        '7\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+        '6\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+        '5\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+        '4\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+        '3\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+        '2\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+        '1\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
     )
     assert repr(board) == expected_repr
 
@@ -34,15 +34,15 @@ def test_board_repr_with_pieces():
     player2 = Player("test name", "black")
     board = Board()
     populate_board(board, [player1, player2])
-    expected_repr = (' \tA\tB\tC\tD\tE\tF\tG\tH\n'
-                     '8\tRO\tKN\tBI\tQU\tKI\tBI\tKN\tRO\n'
-                     '7\tPA\tPA\tPA\tPA\tPA\tPA\tPA\tPA\n'
-                     '6\t__\t__\t__\t__\t__\t__\t__\t__\n'
-                     '5\t__\t__\t__\t__\t__\t__\t__\t__\n'
-                     '4\t__\t__\t__\t__\t__\t__\t__\t__\n'
-                     '3\t__\t__\t__\t__\t__\t__\t__\t__\n'
-                     '2\tPA\tPA\tPA\tPA\tPA\tPA\tPA\tPA\n'
-                     '1\tRO\tKN\tBI\tQU\tKI\tBI\tKN\tRO\n')
+    expected_repr = (' \tA\tB\tC\tD\tE\tF\tG\tH\n\n'
+                     '8\tRO\tKN\tBI\tQU\tKI\tBI\tKN\tRO\n\n'
+                     '7\tPA\tPA\tPA\tPA\tPA\tPA\tPA\tPA\n\n'
+                     '6\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+                     '5\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+                     '4\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+                     '3\t__\t__\t__\t__\t__\t__\t__\t__\n\n'
+                     '2\tPA\tPA\tPA\tPA\tPA\tPA\tPA\tPA\n\n'
+                     '1\tRO\tKN\tBI\tQU\tKI\tBI\tKN\tRO\n\n')
     assert repr(board) == expected_repr
 
 
