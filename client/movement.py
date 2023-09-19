@@ -14,6 +14,12 @@ from mapping import (
 
 
 def knight_can_make(move: Tuple[str, str]) -> bool:
+    """
+    returns a boolean indicating whether a knight could make the provided move. this does not check if another piece is
+    blocking this move.
+    :param move:
+    :return:
+    """
     if not is_move_primitive(move):
         return False
     if move[0] == move[1]:
@@ -22,6 +28,12 @@ def knight_can_make(move: Tuple[str, str]) -> bool:
 
 
 def bishop_can_make(move: Tuple[str, str]) -> bool:
+    """
+    returns a boolean indicating whether a bishop could make the provided move. this does not check if another piece is
+    blocking this move.
+    :param move:
+    :return:
+    """
     if not is_move_primitive(move):
         return False
     if move[0] == move[1]:
@@ -30,6 +42,12 @@ def bishop_can_make(move: Tuple[str, str]) -> bool:
 
 
 def king_can_make(move: Tuple[str, str]) -> bool:
+    """
+    returns a boolean indicating whether a king could make the provided move. this does not check if another piece is
+    blocking this move.
+    :param move:
+    :return:
+    """
     if not is_move_primitive(move):
         return False
     if move[0] == move[1]:
@@ -47,6 +65,12 @@ def king_can_make(move: Tuple[str, str]) -> bool:
 
 
 def rook_can_make(move: Tuple[str, str]) -> bool:
+    """
+    returns a boolean indicating whether a rook could make the provided move. this does not check if another piece is
+    blocking this move.
+    :param move:
+    :return:
+    """
     if not is_move_primitive(move):
         return False
     if move[0] == move[1]:
@@ -59,6 +83,12 @@ def rook_can_make(move: Tuple[str, str]) -> bool:
 
 
 def queen_can_make(move: Tuple[str, str]) -> bool:
+    """
+    returns a boolean indicating whether a queen could make the provided move. this does not check if another piece is
+    blocking this move.
+    :param move:
+    :return:
+    """
     if not is_move_primitive(move):
         return False
     if move[0] == move[1]:
@@ -73,6 +103,14 @@ def queen_can_make(move: Tuple[str, str]) -> bool:
 
 
 def pawn_can_make(move: Tuple[str, str], has_moved: bool, team: str) -> bool:
+    """
+    returns a boolean indicating whether a pawn could make the provided move, this does not check if another piece is
+    blocking this move
+    :param move:
+    :param has_moved:
+    :param team:
+    :return:
+    """
     if not is_move_primitive(move):
         return False
     if move[0] == move[1]:
@@ -112,6 +150,11 @@ def pawn_can_make(move: Tuple[str, str], has_moved: bool, team: str) -> bool:
 
 
 def close_enough_for_king(move: Tuple[str, str]) -> bool:
+    """
+    returns a boolean indicating whether the provided move is within the expected range of a king
+    :param move:
+    :return:
+    """
     horizontal_difference, vertical_difference = calculate_xy_difference(move)
     if vertical_difference == 1 or vertical_difference == -1 and horizontal_difference == 1 or horizontal_difference == -1:
         return True

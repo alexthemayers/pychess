@@ -95,9 +95,18 @@ class Pawn(Piece):
         return f"{self.type.value}"
 
     def has_moved(self) -> bool:
+        """
+        returns the has_moved boolean from a pawn instance
+        :return:
+        """
         return self._has_moved
 
     def set_has_moved(self) -> None:
+        """
+        sets the has_moved boolean on a pawn. This will result in a Runtime Exception if called more than once on the
+        same pawn.
+        :return:
+        """
         if self._has_moved is not False:
             raise RuntimeError()
         self._has_moved = True

@@ -3,7 +3,7 @@ from typing import List, Tuple, Optional, Dict
 from block import _Block
 from mapping import (
     calculate_horizontal_difference,
-    calculate_vertical_difference
+    calculate_vertical_difference, calculate_xy_difference
 )
 from movement import (
     king_can_make,
@@ -227,8 +227,7 @@ class Board:
         next_loc: Optional[str] = None
         last_loc = move[1]
         is_blocked: bool = False
-        vertical_difference = calculate_vertical_difference(current_loc, last_loc)
-        horizontal_difference = calculate_horizontal_difference(current_loc, last_loc)
+        horizontal_difference, vertical_difference = calculate_xy_difference(move)
         # we should not consider a piece at the end position to cause blocking, we take the piece in this case
         while True:
             if vertical_difference > 0 and horizontal_difference > 0:

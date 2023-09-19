@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from mapping import calculate_vertical_difference, calculate_horizontal_difference
+from mapping import calculate_vertical_difference, calculate_horizontal_difference, calculate_xy_difference
 
 _Y_KEY = 0
 _X_KEY = 1
@@ -18,12 +18,17 @@ def is_move_primitive(moves: Tuple[str, str]) -> bool:
     is_move = True
     for s in moves:
         is_move = check_move_notation(s)
-        if is_move == False:
+        if not is_move:
             return is_move
     return is_move
 
 
 def check_move_notation(move: str) -> bool:
+    """
+    returns a boolean indicating if an individual move definition has the correct formatting
+    :param move:
+    :return:
+    """
     if len(move) != 2:
         return False
     letter = move[0]
@@ -80,10 +85,7 @@ def is_possible_l_move(move: Tuple[str, str]) -> bool:
     :param move:
     :return:
     """
-    before = move[0]
-    after = move[1]
-    vertical_difference = calculate_vertical_difference(before, after)
-    horizontal_difference = calculate_horizontal_difference(before, after)
+    horizontal_difference, vertical_difference = calculate_xy_difference(move)
     if vertical_difference == 2 or vertical_difference == -2:
         if horizontal_difference == 1 or horizontal_difference == -1:
             return True

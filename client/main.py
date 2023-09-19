@@ -28,9 +28,10 @@ def main():
         move = get_move()
 
         # is that move valid? is there a piece already there?
-        # FIXME board.get_piece(move[0]) should not be a dependency here
-        while (not player_owns_piece(board, current_player.team, move)
-               and not move_is_possible(board.get_piece(move[0]), board, move)
+        piece_to_move = board.get_piece(move[0])
+        current_player_owns_piece = piece_to_move.get_team() == current_player.team
+        while (not current_player_owns_piece
+               and not move_is_possible(piece_to_move, board, move)
                and not causes_check()):
             print(f"{move} is invalid")
             move = get_move()
@@ -49,13 +50,6 @@ def main():
     """
 
 
-def player_owns_piece(board: Board, owner_team: str, move: Tuple[str, str]) -> bool:
-    if not is_move_primitive(move):
-        return False
-    start = move[0]
-    if board.get_piece(start).player.team == owner_team:
-        return True
-    return False
 
 
 def causes_check():

@@ -27,6 +27,11 @@ class Game:
 
 
 def rotate_players(game: Game):
+    """
+    rotates players in an active game instance
+    :param game:
+    :return:
+    """
     if game.second_player_turn:
         game.second_player_turn = False
     else:

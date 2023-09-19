@@ -30,6 +30,10 @@ def get_current_turn(last_player: Optional[Player], players: List[Player]) -> Pl
 
 
 def get_new_player() -> Player:
+    """
+    prompts a player for team and name, constructs and returns a player object
+    :return:
+    """
     options: List[str] = ["white", "black"]
     name: str = input('Please enter your name: ').strip()
     team: str = ""
