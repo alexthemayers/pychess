@@ -19,7 +19,8 @@ if __name__ == '__main__':
     if client_or_server == CLIENT_ARG:
         if args.host is not None:
             host: str = args.host
-            client_run(host)
+            import asyncio
+            asyncio.run(client_run("http://localhost:8000"))
     if client_or_server == SERVER_ARG:
         if args.host and args.port is not None:
             host: str = args.host
