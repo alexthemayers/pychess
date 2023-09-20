@@ -1,8 +1,8 @@
 import uuid
 
-from chess.lib.active_instance import ActiveInstance
-from chess.lib.board import Board
-from player import Player
+from chess.active_instance import ActiveInstance
+from chess.board import Board
+from chess.player import Player
 
 
 def test_rotate_players_initial_state():

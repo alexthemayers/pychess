@@ -1,6 +1,6 @@
 from enum import Enum
 
-from player import Player
+from chess.player import Player
 
 
 class PieceType(Enum):

@@ -1,4 +1,4 @@
-from movement import (
+from chess.movement import (
     bishop_can_make,
     king_can_make,
     knight_can_make,

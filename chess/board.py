@@ -1,12 +1,12 @@
 import json
 from typing import List, Tuple, Optional, Dict
 
-from block import _Block
-from mapping import (
+from chess.block import _Block
+from chess.mapping import (
     calculate_horizontal_difference,
     calculate_vertical_difference, calculate_xy_difference
 )
-from movement import (
+from chess.movement import (
     king_can_make,
     rook_can_make,
     queen_can_make,
@@ -14,7 +14,7 @@ from movement import (
     knight_can_make,
     pawn_can_make
 )
-from piece import (
+from chess.piece import (
     Piece,
     Pawn,
     King,
@@ -23,7 +23,7 @@ from piece import (
     Bishop,
     Knight
 )
-from player import Player
+from chess.player import Player
 
 _BLOCK_NAMES: List[str] = ["a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
                            "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",

@@ -23,6 +23,7 @@ def new_game():
 
 # Test creating a new game
 def test_new_game(new_game):
+    assert True
     pass  # The new_game fixture handles this test
 
 

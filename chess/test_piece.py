@@ -1,6 +1,6 @@
 from pytest import raises
 
-from piece import (
+from chess.piece import (
     Piece,
     Pawn,
     King,
@@ -9,7 +9,7 @@ from piece import (
     Knight,
     Bishop
 )
-from player import Player
+from chess.player import Player
 
 
 def test_peice_init():

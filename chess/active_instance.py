@@ -1,8 +1,8 @@
 from typing import Optional, List
 from uuid import UUID
 
-from board import Board
-from player import Player
+from chess.board import Board
+from chess.player import Player
 
 
 class ActiveInstance:

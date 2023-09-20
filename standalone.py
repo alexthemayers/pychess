@@ -1,8 +1,8 @@
 from typing import Optional
 
-from chess.lib.board import Board, populate_board, move_is_possible
-from chess.lib.input import get_move
-from chess.lib.player import Player, get_new_player_from_cli, get_current_turn
+from chess import Board, populate_board, move_is_possible
+from chess import get_move
+from chess import Player, get_new_player_from_cli, get_current_turn
 
 
 def run():

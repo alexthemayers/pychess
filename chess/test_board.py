@@ -1,9 +1,7 @@
-from board import Board, populate_board
-from piece import Piece
-from player import Player
+from chess.board import Board, populate_board
+from chess.piece import Piece
+from chess.player import Player
 
-
-# Replace 'your_module' with the actual name of the module where your Board class is defined
 
 def test_board_creation():
     # Test if a Board instance can be created

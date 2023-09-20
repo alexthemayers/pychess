@@ -1,6 +1,6 @@
 from typing import Optional
 
-from piece import Piece
+from chess.piece import Piece
 
 
 class _Block:

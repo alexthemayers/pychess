@@ -22,6 +22,9 @@ venv:
 	@echo "Creating virtual environment..."
 	$(PYTHON) -m venv $(VENV_DIR)
 
+shell:
+	. $(VENV_DIR)/bin/activate
+
 # Create distribution files
 build: venv
 	@echo "Building distribution files..."
@@ -37,13 +40,9 @@ requirements: venv
 	$(PYTHON) -m pip install --upgrade pip && \
 	$(PYTHON) -m pip install -r requirements.txt
 
-test_lib: requirements
+test: requirements
 	. $(VENV_DIR)/bin/activate && \
-	PYTHONPATH=./chess/lib $(PYTHON) -m pytest
-
-test_main: requirements
-	. $(VENV_DIR)/bin/activate && \
-	PYTHONPATH=./chess $(PYTHON) -m pytest
+	PYTHONPATH=. $(PYTHON) -m pytest
 
 run_server: requirements
 	$(PYTHON) chess/main.py server --host 0.0.0.0 --port 8000

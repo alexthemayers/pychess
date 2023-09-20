@@ -18,4 +18,4 @@ jobs:
       - name: Install virtualenv
         run: pip install virtualenv
       - name: Test with pytest
-        run: make test_lib
+        run: make test

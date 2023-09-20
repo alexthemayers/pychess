@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from mapping import calculate_vertical_difference, calculate_horizontal_difference, calculate_xy_difference
+from chess.mapping import calculate_vertical_difference, calculate_horizontal_difference, calculate_xy_difference
 
 _Y_KEY = 0
 _X_KEY = 1

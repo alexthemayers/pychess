@@ -1,6 +1,6 @@
-from block import _Block
-from piece import Piece
-from player import Player
+from chess.block import _Block
+from chess.piece import Piece
+from chess.player import Player
 
 
 def test_block():

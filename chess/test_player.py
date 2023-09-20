@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from player import get_new_player_from_cli, Player, get_current_turn
+from chess.player import get_new_player_from_cli, Player, get_current_turn
 
 
 def test_get_new_player_valid_input():

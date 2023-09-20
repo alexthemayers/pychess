@@ -1,13 +1,13 @@
 from typing import Tuple
 
-from input import (
+from chess.input import (
     is_possible_diagonal_move,
     is_possible_vertical_move,
     is_possible_horizontal_move,
     is_possible_l_move,
     is_move_primitive
 )
-from mapping import (
+from chess.mapping import (
     calculate_diagonal_difference,
     calculate_xy_difference
 )

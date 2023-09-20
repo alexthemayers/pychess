@@ -5,11 +5,7 @@ from uuid import uuid4, UUID
 import uvicorn
 from fastapi import FastAPI, Header
 
-from chess.lib.active_instance import ActiveInstance
-from chess.lib.board import Board, move_is_possible, populate_board
-from chess.lib.input import is_move_primitive
-from chess.lib.player import Player
-from chess.lib.team import TeamEnum
+from chess import ActiveInstance, Board, move_is_possible, populate_board, is_move_primitive, Player, TeamEnum
 
 gamesList = Dict[str, ActiveInstance]
 

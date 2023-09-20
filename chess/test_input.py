@@ -1,7 +1,7 @@
 from typing import List
 from unittest.mock import patch
 
-from input import (
+from chess.input import (
     is_move_primitive,
     is_possible_diagonal_move,
     is_possible_horizontal_move,
@@ -11,8 +11,6 @@ from input import (
     check_move_notation
 )
 
-
-# Replace 'your_module' with the actual name of the module where your functions are defined
 
 def test_check_move_notation_valid():
     valid_moves = ["a1", "b2", "c3", "d4"]

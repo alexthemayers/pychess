@@ -1,8 +1,8 @@
 import argparse
 
-import client
-import server
-import standalone
+from client import run as client_run
+from server import run as server_run
+from standalone import run as standalone_run
 
 SERVER_ARG = "server"
 CLIENT_ARG = "client"
@@ -14,13 +14,14 @@ if __name__ == '__main__':
     parser.add_argument("--server", type=bool, default=False, help="if set, server will run")
     args = parser.parse_args()
     if args.arg1 is None:
-        standalone.run()
+        standalone_run()
     client_or_server: str = args.arg1
     if client_or_server == CLIENT_ARG:
         if args.host is not None:
-            client.run(host)
+            host: str = args.host
+            client_run(host)
     if client_or_server == SERVER_ARG:
         if args.host and args.port is not None:
             host: str = args.host
             port: int = args.port
-            server.run(host, port)
+            server_run(host, port)
