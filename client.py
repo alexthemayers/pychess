@@ -1,13 +1,11 @@
-#!/usr/bin/env python3
+from typing import Optional
 
-from typing import Optional, Tuple
-
-from board import Board, move_is_possible, populate_board
-from input import get_move, is_move_primitive
-from player import Player, get_new_player, get_current_turn
+from chess.board import Board, populate_board, move_is_possible
+from chess.input import get_move
+from chess.player import Player, get_new_player, get_current_turn
 
 
-def main():
+def run():
     won: bool = False
     p1 = get_new_player()
     print("Next player:")
@@ -50,12 +48,6 @@ def main():
     """
 
 
-
-
 def causes_check():
     # TODO Implement me
     return False
-
-
-if __name__ == "__main__":
-    main()
