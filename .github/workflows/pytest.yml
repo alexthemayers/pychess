@@ -15,5 +15,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install virtualenv
+        run: pip install virtualenv
+      - name: Virtual env easy install
+        run: sudo /usr/bin/easy_install virtualenv
       - name: Test with pytest
         run: bash -c "make test_lib"
