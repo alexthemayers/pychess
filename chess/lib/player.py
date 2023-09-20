@@ -29,7 +29,7 @@ def get_current_turn(last_player: Optional[Player], players: List[Player]) -> Pl
             return p
 
 
-def get_new_player() -> Player:
+def get_new_player_from_cli() -> Player:
     """
     prompts a player for team and name, constructs and returns a player object
     :return:

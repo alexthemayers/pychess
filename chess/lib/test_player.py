@@ -1,11 +1,11 @@
 from unittest.mock import patch
 
-from player import get_new_player, Player, get_current_turn
+from player import get_new_player_from_cli, Player, get_current_turn
 
 
 def test_get_new_player_valid_input():
     with patch('builtins.input', side_effect=["Alice", "white"]):
-        player = get_new_player()
+        player = get_new_player_from_cli()
     assert isinstance(player, Player)
     assert player.name == "Alice"
     assert player.team == "white"
@@ -13,7 +13,7 @@ def test_get_new_player_valid_input():
 
 def test_get_new_player_invalid_input_then_valid():
     with patch('builtins.input', side_effect=["Bob", "red", "white"]):
-        player = get_new_player()
+        player = get_new_player_from_cli()
     assert isinstance(player, Player)
     assert player.name == "Bob"
     assert player.team == "white"
@@ -21,7 +21,7 @@ def test_get_new_player_invalid_input_then_valid():
 
 def test_get_new_player_invalid_input_then_valid_with_different_team():
     with patch('builtins.input', side_effect=["Charlie", "blue", "black"]):
-        player = get_new_player()
+        player = get_new_player_from_cli()
     assert isinstance(player, Player)
     assert player.name == "Charlie"
     assert player.team == "black"

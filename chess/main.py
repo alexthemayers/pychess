@@ -1,6 +1,7 @@
-import server, client
 import argparse
 
+import client
+import server
 import standalone
 
 SERVER_ARG = "server"
@@ -23,4 +24,3 @@ if __name__ == '__main__':
             host: str = args.host
             port: int = args.port
             server.run(host, port)
-

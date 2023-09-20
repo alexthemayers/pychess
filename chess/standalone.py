@@ -2,14 +2,14 @@ from typing import Optional
 
 from chess.lib.board import Board, populate_board, move_is_possible
 from chess.lib.input import get_move
-from chess.lib.player import Player, get_new_player, get_current_turn
+from chess.lib.player import Player, get_new_player_from_cli, get_current_turn
 
 
 def run():
     won: bool = False
-    p1 = get_new_player()
+    p1 = get_new_player_from_cli()
     print("Next player:")
-    p2 = get_new_player()
+    p2 = get_new_player_from_cli()
     # game = Game()
     board = populate_board(Board(), [p1, p2])
     current_player: Optional[Player] = None
