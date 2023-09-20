@@ -4,7 +4,6 @@ from fastapi.testclient import TestClient
 
 from server import register_routes
 
-# Create a test client for the FastAPI app
 
 app = FastAPI()
 games = {}
