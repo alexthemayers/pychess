@@ -39,14 +39,20 @@ requirements: venv
 
 test_lib: requirements
 	@source $(VENV_DIR)/bin/activate && \
-	PYTHONPATH=./chess $(PYTHON) -m pytest
+	PYTHONPATH=./chess/lib $(PYTHON) -m pytest
 
 test_main: requirements
 	@source $(VENV_DIR)/bin/activate && \
-	$(PYTHON) -m pytest
+	PYTHONPATH=./chess $(PYTHON) -m pytest
 
 run_server: requirements
-	$(PYTHON) main.py --server --
+	$(PYTHON) chess/main.py server --host 0.0.0.0 --port 8000
+
+run_client: requirements
+	$(PYTHON) chess/main.py client --host $(API_BASE)
+
+run_standalone: requirements
+	$(PYTHON) chess/main.py
 # Clean up distribution files and virtual environment
 clean:
 	@echo "Cleaning up..."

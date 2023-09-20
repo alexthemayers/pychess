@@ -1,3 +1,4 @@
+import json
 from typing import List, Tuple, Optional, Dict
 
 from block import _Block
@@ -62,6 +63,10 @@ class Board:
                 ret += "\t"
             idx += 1
         return ret
+
+    def to_json(self) -> str:
+        state = [(b.position, b.get_piece()) for b in self._board]
+        return json.dumps(state)
 
     def _position_to_index(self, position: str) -> int:
         """

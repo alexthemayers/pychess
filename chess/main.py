@@ -1,6 +1,7 @@
 import server, client
 import argparse
-import os
+
+import standalone
 
 SERVER_ARG = "server"
 CLIENT_ARG = "client"
@@ -12,12 +13,13 @@ if __name__ == '__main__':
     parser.add_argument("--server", type=bool, default=False, help="if set, server will run")
     args = parser.parse_args()
     if args.arg1 is None:
-        raise RuntimeError("first argument should either be 'client' or 'server'")
+        standalone.run()
     client_or_server: str = args.arg1
     if client_or_server == CLIENT_ARG:
-        client.run()
+        if args.host is not None:
+            client.run(host)
     if client_or_server == SERVER_ARG:
-        if args.host and args.port:
+        if args.host and args.port is not None:
             host: str = args.host
             port: int = args.port
             server.run(host, port)
