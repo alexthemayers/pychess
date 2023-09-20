@@ -13,6 +13,7 @@ PYTHON = python3
 # Directory where distribution files will be created
 DIST_DIR = dist
 
+API_BASE := "0.0.0.0"
 
 # Default target
 all: clean build
@@ -45,13 +46,16 @@ test: requirements
 	PYTHONPATH=. $(PYTHON) -m pytest
 
 run_server: requirements
-	$(PYTHON) chess/main.py server --host 0.0.0.0 --port 8000
+	. $(VENV_DIR)/bin/activate && \
+	$(PYTHON) main.py server --host 0.0.0.0 --port 8000
 
 run_client: requirements
-	$(PYTHON) chess/main.py client --host $(API_BASE)
+	. $(VENV_DIR)/bin/activate && \
+	$(PYTHON) main.py client --host $(API_BASE)
 
 run_standalone: requirements
-	$(PYTHON) chess/main.py
+	. $(VENV_DIR)/bin/activate && \
+	$(PYTHON) main.py
 # Clean up distribution files and virtual environment
 clean:
 	@echo "Cleaning up..."

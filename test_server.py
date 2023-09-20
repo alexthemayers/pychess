@@ -15,15 +15,13 @@ client = TestClient(app)
 # Define a fixture to create a new game before each test
 @pytest.fixture
 def new_game():
-    pass
-    # response = client.post("/new_game/game1")
-    # assert response.status_code == 200
-    # assert response.json() == {"message": "New game created with ID: game1"}
+    response = client.post("/new_game", json={"name": "testname", "team": "white"})
+    assert response.status_code == 204
+    assert response.json() == {}
 
 
 # Test creating a new game
 def test_new_game(new_game):
-    assert True
     pass  # The new_game fixture handles this test
 
 
