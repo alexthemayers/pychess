@@ -96,8 +96,9 @@ def register_routes(app: FastAPI, active_game_instances: gamesList):
         game_instance = active_game_instances.get(game_id)
 
         # authorization
-        token = token.lstrip("Bearer ")
-        if str(game_instance.token()) != token:
+        wanted_token = str(game_instance.token())
+        actual_token = token.removeprefix("Bearer ")
+        if wanted_token != actual_token:
             return {"error", "not authorised to enter this game"}, 401
 
         # move validation
