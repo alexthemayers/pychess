@@ -22,8 +22,6 @@ def register_routes(app: FastAPI, active_game_instances: gamesList):
     @app.post("/new_game")
     def new_game_handler(name: str, team: str):
         """
-        TODO should take player teams, names, tokens. Create player objects, create Game(player1=player1, player2=None)
-        TODO should return a basic game id for others to use for connection
         :param name:
         :param team:
         :return:
@@ -38,14 +36,14 @@ def register_routes(app: FastAPI, active_game_instances: gamesList):
         game_id: UUID = uuid4()
         token: UUID = uuid4()
         if game_id in active_game_instances:
-            return {"message": "game already exists"}
+            return {"message": "game already exists"}, 409
 
         # create game in memory with player and new board
         new_game_instance = ActiveInstance(Board(), token)
         new_game_instance.add_player(Player(name, team))
         active_game_instances[str(game_id)] = new_game_instance
         header = {"token": f"Bearer {str(token)}"}
-        return {}, 204, header
+        return {"game_id": game_id}, 204, header
 
     @app.post("/join_game/{game_id}")
     def join_game_handler(game_id: str, name: str, team: str):
@@ -66,6 +64,8 @@ def register_routes(app: FastAPI, active_game_instances: gamesList):
         token: UUID = uuid4()
 
         # create game in memory with player and new board
+        if not str(game_id) in active_game_instances.keys():
+            return {"error": f"cannot find game with id {game_id}"}, 404
         game = active_game_instances[str(game_id)]
         game.add_player(Player(name, team))
         header: Dict[str, str] = {"token": f"Bearer {str(token)}"}
@@ -80,11 +80,11 @@ def register_routes(app: FastAPI, active_game_instances: gamesList):
         returns the ids of games that are waiting to be joined
         :return:
         """
-        return {[game_id for game_id in active_game_instances.keys() if
-                 active_game_instances.get(game_id).is_waiting_for_players()]}, 200
+        return {"waiting_games": {game_id for game_id in active_game_instances.keys() if
+                                  active_game_instances.get(game_id).is_waiting_for_players()}}, 200
 
     @app.post("/make_move/{game_id}")
-    def make_move(game_id: str, move: Tuple[str, str], token=Header(None)):
+    def make_move(game_id: str, move: Tuple[str, str], token=Header()):
 
         # validation
         if len(move) != 2 or not is_move_primitive(move):
@@ -96,7 +96,8 @@ def register_routes(app: FastAPI, active_game_instances: gamesList):
         game_instance = active_game_instances.get(game_id)
 
         # authorization
-        if game_instance.token() != uuid.UUID(token):
+        token = token.lstrip("Bearer ")
+        if str(game_instance.token()) != token:
             return {"error", "not authorised to enter this game"}, 401
 
         # move validation
@@ -108,13 +109,13 @@ def register_routes(app: FastAPI, active_game_instances: gamesList):
             return {"error", "this piece is not owned by you"}, 400
         if not move_is_possible(piece_to_move, board, move):
             return {"error", "that move is not possible"}, 400
-        if causes_check():
-            return {"error", "that move puts you in check"}, 400
+        # if causes_check():
+        #     return {"error", "that move puts you in check"}, 400
 
         # move
         board.move(move)
         # Check if the game is over
         if game_instance.winner() is not None:
             return {"message": "game over", "winner": game_instance.winner()}, 420
-        game_instance.game().rotate_players()
+        game_instance.rotate_players()
         return {"message": "move accepted", "new_game_state": game_instance.json_state()}, 200

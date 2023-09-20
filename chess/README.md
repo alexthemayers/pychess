@@ -10,10 +10,13 @@ ___
 ## List of actions performed in each round of a game of chess
 
 ### INPUT
+
     - prompt user for input
         - prompt user for source block name
         - prompt user for destination block name 
+
 ### VALIDATION
+
     - validate source block name notation
     - validate source block game rules
         - that there's an initial piece present
@@ -24,12 +27,16 @@ ___
         - that the move is within the pieces move pattern
         - that the move is within the pieces range
         - that the move is not blocked by any other pieces 
+
 ### MOVE
+
     - check if the destination block name has a piece
         - remove destination block piece if necessary
     - add the initial piece to the destination block name
     - remove the initial piece from the source block name
+
 ### CHECK GAME CONDITIONS
+
     - pre-win conditions
         - check
         - [ castling? ] - Can't be done more than once
@@ -37,5 +44,7 @@ ___
     - win conditions [/game ending]
         - checkmate
         - stalemate
+
 ### STATE CHANGE
+
     - rotate current player

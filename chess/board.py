@@ -1,4 +1,3 @@
-import json
 from typing import List, Tuple, Optional, Dict
 
 from chess.block import _Block
@@ -64,9 +63,8 @@ class Board:
             idx += 1
         return ret
 
-    def to_json(self) -> str:
-        state = [(b.position, b.get_piece()) for b in self._board]
-        return json.dumps(state)
+    def to_obj(self) -> Dict:
+        return {b.position: b.get_piece().to_obj() if b.get_piece() is not None else {} for b in self.get_board()}
 
     def _position_to_index(self, position: str) -> int:
         """
@@ -233,6 +231,8 @@ class Board:
         last_loc = move[1]
         is_blocked: bool = False
         horizontal_difference, vertical_difference = calculate_xy_difference(move)
+        if horizontal_difference == 0 or vertical_difference == 0:
+            return False
         # we should not consider a piece at the end position to cause blocking, we take the piece in this case
         while True:
             if vertical_difference > 0 and horizontal_difference > 0:
@@ -258,6 +258,8 @@ class Board:
         next_loc: Optional[str] = None
         is_blocked: bool = False
         vertical_difference = calculate_vertical_difference(current_loc, last_loc)
+        if vertical_difference == 0:
+            return False
         # we should not consider a piece at the end position to cause blocking, we take the piece in this case
         while True:
             if vertical_difference > 0:
@@ -279,6 +281,8 @@ class Board:
         next_loc: Optional[str] = None
         is_blocked: bool = False
         horizontal_difference = calculate_horizontal_difference(current_loc, last_loc)
+        if horizontal_difference == 0:
+            return False
         # we should not consider a piece at the end position to cause blocking, we take the piece in this case
         while True:
             if horizontal_difference > 0:
@@ -345,6 +349,7 @@ def populate_board(board: Board, players: List[Player]) -> Board:
         elif b.position.startswith("e"):  # K
             b.set_piece(King(players[team]))
         else:
+            # TODO throw an error here
             print(f"point {b.position} should not be present on board")
 
     for b in board.get_board():

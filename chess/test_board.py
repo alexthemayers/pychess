@@ -1,3 +1,5 @@
+import json
+
 from chess.board import Board, populate_board
 from chess.piece import Piece
 from chess.player import Player
@@ -66,7 +68,11 @@ def test_move_methods():
     board = Board()
 
     assert board.north("e4", 2) == "e6"
+    assert board.north_east("e4", 2) == "g6"
+    assert board.north_west("e4", 2) == "c6"
     assert board.south("e4", 3) == "e1"
+    assert board.south_east("e4", 3) == "h1"
+    assert board.south_west("e4", 3) == "b1"
     assert board.east("e4", 2) == "g4"
     assert board.west("e4", 1) == "d4"
     # Add more test cases for other move methods
@@ -138,3 +144,75 @@ def test_is_blocked_vertical():
     assert not board.is_blocked_vertical(("a1", "a7"))  # starting point and endpoint has piece
     assert not board.is_blocked_vertical(("b1", "b7"))  # not blocked
     assert board.is_blocked_vertical(("a5", "a8"))  # blocked by a7
+
+
+def test_board_to_obj():
+    board = Board()
+    player1 = Player("testname", "white")
+    player2 = Player("testname", "black")
+    populate_board(board, [player1, player2])
+    board_as_object = board.to_obj()
+    assert board_as_object == {'a1': {'castled': False, 'team': 'white', 'type': 'Rook'},
+                               'a2': {'has_moved': False, 'team': 'white', 'type': 'Pawn'},
+                               'a3': {},
+                               'a4': {},
+                               'a5': {},
+                               'a6': {},
+                               'a7': {'has_moved': False, 'team': 'black', 'type': 'Pawn'},
+                               'a8': {'castled': False, 'team': 'black', 'type': 'Rook'},
+                               'b1': {'team': 'white', 'type': 'Knight'},
+                               'b2': {'has_moved': False, 'team': 'white', 'type': 'Pawn'},
+                               'b3': {},
+                               'b4': {},
+                               'b5': {},
+                               'b6': {},
+                               'b7': {'has_moved': False, 'team': 'black', 'type': 'Pawn'},
+                               'b8': {'team': 'black', 'type': 'Knight'},
+                               'c1': {'team': 'white', 'type': 'Bishop'},
+                               'c2': {'has_moved': False, 'team': 'white', 'type': 'Pawn'},
+                               'c3': {},
+                               'c4': {},
+                               'c5': {},
+                               'c6': {},
+                               'c7': {'has_moved': False, 'team': 'black', 'type': 'Pawn'},
+                               'c8': {'team': 'black', 'type': 'Bishop'},
+                               'd1': {'team': 'white', 'type': 'Queen'},
+                               'd2': {'has_moved': False, 'team': 'white', 'type': 'Pawn'},
+                               'd3': {},
+                               'd4': {},
+                               'd5': {},
+                               'd6': {},
+                               'd7': {'has_moved': False, 'team': 'black', 'type': 'Pawn'},
+                               'd8': {'team': 'black', 'type': 'Queen'},
+                               'e1': {'castled': False, 'team': 'white', 'type': 'King'},
+                               'e2': {'has_moved': False, 'team': 'white', 'type': 'Pawn'},
+                               'e3': {},
+                               'e4': {},
+                               'e5': {},
+                               'e6': {},
+                               'e7': {'has_moved': False, 'team': 'black', 'type': 'Pawn'},
+                               'e8': {'castled': False, 'team': 'black', 'type': 'King'},
+                               'f1': {'team': 'white', 'type': 'Bishop'},
+                               'f2': {'has_moved': False, 'team': 'white', 'type': 'Pawn'},
+                               'f3': {},
+                               'f4': {},
+                               'f5': {},
+                               'f6': {},
+                               'f7': {'has_moved': False, 'team': 'black', 'type': 'Pawn'},
+                               'f8': {'team': 'black', 'type': 'Bishop'},
+                               'g1': {'team': 'white', 'type': 'Knight'},
+                               'g2': {'has_moved': False, 'team': 'white', 'type': 'Pawn'},
+                               'g3': {},
+                               'g4': {},
+                               'g5': {},
+                               'g6': {},
+                               'g7': {'has_moved': False, 'team': 'black', 'type': 'Pawn'},
+                               'g8': {'team': 'black', 'type': 'Knight'},
+                               'h1': {'castled': False, 'team': 'white', 'type': 'Rook'},
+                               'h2': {'has_moved': False, 'team': 'white', 'type': 'Pawn'},
+                               'h3': {},
+                               'h4': {},
+                               'h5': {},
+                               'h6': {},
+                               'h7': {'has_moved': False, 'team': 'black', 'type': 'Pawn'},
+                               'h8': {'castled': False, 'team': 'black', 'type': 'Rook'}}

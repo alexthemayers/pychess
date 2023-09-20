@@ -65,4 +65,4 @@ class ActiveInstance:
 
     def json_state(self) -> dict[str, str | Player | None]:
         # TODO extra state should be included here: winner, check, next turn, possibly more
-        return {"board": self.board().to_json(), "winner": self.winner(), "next_turn": self.current_player().team}
+        return {"board": self.board().to_obj(), "winner": self.winner(), "next_turn": self.current_player().team}

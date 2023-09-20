@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Dict
 
 from chess.player import Player
 
@@ -16,6 +17,7 @@ class PieceType(Enum):
 
 
 class Piece:  # base class for all pieces
+    type: PieceType
     player: Player
 
     def __init__(self, player: Player):
@@ -24,10 +26,18 @@ class Piece:  # base class for all pieces
     def get_team(self) -> str:
         return self.player.team.lower()
 
+    def to_obj(self) -> Dict[str, str | bool]:
+        return {"type": self.type.value,
+                "team": self.get_team()}
+
 
 class Rook(Piece):
     castled: bool = False
-    type: PieceType
+
+    def to_obj(self) -> dict[str, str | bool]:
+        return {"type": self.type.value,
+                "team": self.get_team(),
+                "castled": self.castled}
 
     def __init__(self, player):
         super().__init__(player)
@@ -38,7 +48,6 @@ class Rook(Piece):
 
 
 class Bishop(Piece):
-    type: PieceType
 
     # TODO handle blocking pieces on board
     def __init__(self, player):
@@ -50,7 +59,6 @@ class Bishop(Piece):
 
 
 class Knight(Piece):
-    type: PieceType
 
     def __init__(self, player):
         super().__init__(player)
@@ -61,8 +69,12 @@ class Knight(Piece):
 
 
 class King(Piece):
-    type: PieceType
     castled: bool = False
+
+    def to_obj(self) -> dict[str, str | bool]:
+        return {"type": self.type.value,
+                "team": self.get_team(),
+                "castled": self.castled}
 
     def __init__(self, player):
         super().__init__(player)
@@ -73,7 +85,6 @@ class King(Piece):
 
 
 class Queen(Piece):
-    type: PieceType
 
     def __init__(self, player):
         super().__init__(player)
@@ -84,7 +95,6 @@ class Queen(Piece):
 
 
 class Pawn(Piece):
-    type: PieceType
     _has_moved: bool = False
 
     def __init__(self, player):
@@ -110,3 +120,8 @@ class Pawn(Piece):
         if self._has_moved is not False:
             raise RuntimeError()
         self._has_moved = True
+
+    def to_obj(self) -> dict[str, str | bool]:
+        return {"type": self.type.value,
+                "team": self.get_team(),
+                "has_moved": self.has_moved()}
