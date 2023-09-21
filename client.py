@@ -24,6 +24,8 @@ async def run(host: str):
         body, status = response.json()
         assert status == 200
 
+
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(run("http://localhost"))

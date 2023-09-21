@@ -1,5 +1,3 @@
-import json
-
 from chess.board import Board, populate_board
 from chess.piece import Piece
 from chess.player import Player

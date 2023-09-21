@@ -1,11 +1,18 @@
-import uuid
 from typing import Dict, Tuple
 from uuid import uuid4, UUID
 
 import uvicorn
 from fastapi import FastAPI, Header
 
-from chess import ActiveInstance, Board, move_is_possible, populate_board, is_move_primitive, Player, TeamEnum
+from chess import (
+    ActiveInstance,
+    Board,
+    move_is_possible,
+    populate_board,
+    is_move_primitive,
+    Player,
+    TeamEnum
+)
 
 gamesList = Dict[str, ActiveInstance]
 
