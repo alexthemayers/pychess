@@ -47,15 +47,16 @@ test: requirements
 
 run_server: requirements
 	. $(VENV_DIR)/bin/activate && \
-	$(PYTHON) main.py server --host 0.0.0.0 --port 8000
+	$(PYTHON) main.py server --host $(API_BASE) --port 8000
 
 run_client: requirements
 	. $(VENV_DIR)/bin/activate && \
-	$(PYTHON) main.py client --host $(API_BASE)
+	$(PYTHON) main.py client --host "http://localhost"
 
 run_standalone: requirements
 	. $(VENV_DIR)/bin/activate && \
-	$(PYTHON) main.py
+	$(PYTHON) main.py standalone_gui
+
 # Clean up distribution files and virtual environment
 clean:
 	@echo "Cleaning up..."

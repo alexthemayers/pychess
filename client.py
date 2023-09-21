@@ -1,7 +1,9 @@
 import httpx
 
 
-async def run(host: str):
+async def run(host: str, port: str | None):
+    if port is not None:
+        host = f"{host}:{str(port)}"
     async with httpx.AsyncClient() as client:
         name_player1 = "player1"
         name_player2 = "player2"
@@ -28,4 +30,4 @@ async def run(host: str):
 if __name__ == "__main__":
     import asyncio
 
-    asyncio.run(run("http://localhost"))
+    asyncio.run(run("http://localhost", 8000))

@@ -1,4 +1,5 @@
 from typing import Optional
+import os
 
 from chess import (
     Board,
@@ -12,8 +13,10 @@ from chess import (
 
 
 def run():
+    os.system("clear")
     won: bool = False
     p1 = get_new_player_from_cli()
+    os.system("clear")
     print("Next player:")
     p2 = get_new_player_from_cli()
     # game = Game()
@@ -21,6 +24,7 @@ def run():
     current_player: Optional[Player] = None
 
     while not won:  # check if game over
+        os.system("clear")
         # print board
         print(board)
 
