@@ -133,3 +133,4 @@ dmypy.json
 
 # OSX specific
 .DS_Store
+/frontend/node_modules/
